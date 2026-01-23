@@ -3,12 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=3.0, user-scalable=yes">
     <title>Cardápio Digital</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PhotoSwipe CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe.min.css">
 
     <style>
         /* Smooth scrolling */
@@ -49,18 +47,31 @@
                 transform: translateY(0);
             }
         }
+
+        /* Immersive Mode Classes */
+        body.ui-hidden nav,
+        body.ui-hidden .floating-buttons {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Smooth transition for UI elements */
+        nav,
+        .floating-buttons {
+            transition: opacity 0.4s ease;
+        }
     </style>
 </head>
 
-<body class="bg-gray-900 text-white font-sans antialiased pb-20 min-h-screen flex flex-col">
+<body
+    class="bg-gray-900 text-white font-sans antialiased pb-20 min-h-screen flex flex-col transition-colors duration-300">
 
     <!-- Navbar -->
-    <nav
-        class="sticky top-0 z-40 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg transition-all duration-300">
-        <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+    <nav class="sticky top-0 z-40 bg-gray-900/95 backdrop-blur-sm border-b border-gray-800 shadow-lg px-4 py-3">
+        <div class="max-w-md mx-auto flex items-center justify-between">
             <!-- Back Button (Hidden on Home) -->
             <button onclick="showHome()" id="backBtn"
-                class="hidden flex items-center text-amber-500 hover:text-amber-400 font-medium transition-colors">
+                class="hidden flex items-center text-amber-500 hover:text-amber-400 font-medium transition-colors p-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-1" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -76,7 +87,7 @@
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-md mx-auto px-4 py-8 flex-1 flex flex-col" id="gallery">
+    <main class="max-w-md mx-auto px-4 py-8 flex-1 flex flex-col">
 
         <!-- Welcome / Home Selection Screen -->
         <section id="home-screen" class="flex-1 flex flex-col items-center justify-center space-y-6 animate-fade-in">
@@ -88,11 +99,10 @@
                 <p class="text-gray-400">Escolha uma opção para começar:</p>
             </div>
 
-            <!-- DRINKS BUTTON (NOW FIRST) -->
+            <!-- DRINKS BUTTON (First) -->
             <button onclick="showSection('bebidas')"
                 class="w-full max-w-sm group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-700 p-8 shadow-xl border border-gray-700 hover:border-amber-500/50 transition-all duration-300 transform hover:-translate-y-1">
                 <div class="relative z-10 flex flex-col items-center">
-                    <!-- Icon: Beer Mug -->
                     <span class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🍺</span>
                     <span class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">CARDÁPIO DE
                         BEBIDAS</span>
@@ -103,11 +113,10 @@
                 </div>
             </button>
 
-            <!-- FOOD BUTTON (NOW SECOND) -->
+            <!-- FOOD BUTTON (Second) -->
             <button onclick="showSection('comidas')"
                 class="w-full max-w-sm group relative overflow-hidden rounded-2xl bg-gradient-to-br from-gray-800 to-gray-700 p-8 shadow-xl border border-gray-700 hover:border-amber-500/50 transition-all duration-300 transform hover:-translate-y-1">
                 <div class="relative z-10 flex flex-col items-center">
-                    <!-- Icon: Fries -->
                     <span class="text-5xl mb-3 group-hover:scale-110 transition-transform duration-300">🍟</span>
                     <span class="text-xl font-bold text-white group-hover:text-amber-500 transition-colors">CARDÁPIO DE
                         COMIDAS</span>
@@ -121,49 +130,40 @@
 
         <!-- Comidas Section (Hidden initially) -->
         <section id="comidas" class="space-y-6 hidden animate-fade-in w-full">
-            <!-- Image 2 is now correctly placed here for Food -->
-            <div class="pswp-gallery__item rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-                <a href="menu-comidas.webp" data-pswp-width="1000" data-pswp-height="1414" target="_blank"
-                    class="block relative group">
-                    <img src="menu-comidas.webp" alt="Cardápio de Comidas"
-                        class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-105"
+            <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                <!-- Immersive Toggle on Click -->
+                <div onclick="toggleImmersiveMode()" class="cursor-zoom-in relative">
+                    <img src="menu-comidas.webp" alt="Cardápio de Comidas" class="w-full h-auto object-cover"
                         loading="lazy">
-                    <div
-                        class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                        <span
-                            class="opacity-0 group-hover:opacity-100 bg-black/60 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md transition-opacity duration-300">
-                            🔍 Ampliar
+                    <div class="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+                        <span class="bg-black/50 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
+                            Toque para modo cheio / Pinça para zoom
                         </span>
                     </div>
-                </a>
+                </div>
             </div>
         </section>
 
         <!-- Bebidas Section (Hidden initially) -->
         <section id="bebidas" class="space-y-6 hidden animate-fade-in w-full">
-            <!-- Image 1 is now correctly placed here for Drinks -->
-            <div class="pswp-gallery__item rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
-                <a href="menu-bebidas.webp" data-pswp-width="1000" data-pswp-height="1414" target="_blank"
-                    class="block relative group">
-                    <img src="menu-bebidas.webp" alt="Cardápio de Bebidas"
-                        class="w-full h-auto object-cover transform transition-transform duration-500 group-hover:scale-105"
+            <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-800">
+                <!-- Immersive Toggle on Click -->
+                <div onclick="toggleImmersiveMode()" class="cursor-zoom-in relative">
+                    <img src="menu-bebidas.webp" alt="Cardápio de Bebidas" class="w-full h-auto object-cover"
                         loading="lazy">
-                    <div
-                        class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-                        <span
-                            class="opacity-0 group-hover:opacity-100 bg-black/60 text-white px-4 py-2 rounded-full text-sm font-medium backdrop-blur-md transition-opacity duration-300">
-                            🔍 Ampliar
+                    <div class="absolute bottom-4 left-0 right-0 text-center pointer-events-none">
+                        <span class="bg-black/50 text-white text-xs px-3 py-1 rounded-full backdrop-blur-sm">
+                            Toque para modo cheio / Pinça para zoom
                         </span>
                     </div>
-                </a>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <!-- Floating Action Buttons (Whatsapp Removed) -->
-    <div class="fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
-
+    <!-- Floating Action Buttons -->
+    <div class="floating-buttons fixed bottom-6 right-6 flex flex-col items-end space-y-4 z-50">
         <!-- Scroll to Top -->
         <button onclick="scrollToTop()" id="scrollTopBtn"
             class="p-3 bg-gray-700 text-white rounded-full shadow-lg hover:bg-gray-600 transition-all duration-300 transform translate-y-20 opacity-0 group focus:outline-none">
@@ -172,57 +172,61 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
             </svg>
         </button>
-
     </div>
 
     <!-- Scripts -->
-    <script type="module">
-        import PhotoSwipeLightbox from 'https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe-lightbox.esm.min.js';
-        const lightbox = new PhotoSwipeLightbox({
-            gallery: '#gallery',
-            children: 'a',
-            pswpModule: () => import('https://cdnjs.cloudflare.com/ajax/libs/photoswipe/5.4.3/photoswipe.esm.min.js')
-        });
-        lightbox.init();
-    </script>
-
     <script>
         const homeScreen = document.getElementById('home-screen');
         const backBtn = document.getElementById('backBtn');
         const pageTitle = document.getElementById('pageTitle');
         const scrollTopBtn = document.getElementById('scrollTopBtn');
+        const body = document.body;
+
+        // Immersive Mode
+        function toggleImmersiveMode() {
+            body.classList.toggle('ui-hidden');
+
+            // Optional: Provide feedback or logic when hidden
+            if (body.classList.contains('ui-hidden')) {
+                // UI Hidden
+            } else {
+                // UI Visible
+            }
+        }
+
+        // --- Navigation Logic ---
 
         function showHome() {
-            // Hide all sections
+            // Ensure UI is visible when going home
+            body.classList.remove('ui-hidden');
+
+            // Hide sections
             document.getElementById('comidas').classList.add('hidden');
             document.getElementById('bebidas').classList.add('hidden');
 
             // Show home
             homeScreen.classList.remove('hidden');
-            homeScreen.classList.add('flex'); // Maintain flex layout for centering
+            homeScreen.classList.add('flex');
 
             // UI Updates
             backBtn.classList.add('hidden');
             pageTitle.innerText = 'Menu Principal';
 
-            // Reset scroll
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function showSection(sectionId) {
-            // Hide home
+            body.classList.remove('ui-hidden');
+
             homeScreen.classList.add('hidden');
             homeScreen.classList.remove('flex');
 
-            // Hide all sections first
             document.getElementById('comidas').classList.add('hidden');
             document.getElementById('bebidas').classList.add('hidden');
 
-            // Show selected section
             const section = document.getElementById(sectionId);
             section.classList.remove('hidden');
 
-            // UI Updates
             backBtn.classList.remove('hidden');
 
             if (sectionId === 'comidas') {
@@ -231,11 +235,10 @@
                 pageTitle.innerText = 'Cardápio de Bebidas';
             }
 
-            // Reset scroll
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Scroll logic
+        // Scroll Logic
         window.addEventListener('scroll', () => {
             if (window.scrollY > 300) {
                 scrollTopBtn.classList.remove('translate-y-20', 'opacity-0');
